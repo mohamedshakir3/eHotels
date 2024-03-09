@@ -25,8 +25,6 @@ export default async function SearchResults({
 
 	const hotels: any = await getHotels(country);
 
-	console.log(hotels);
-
 	return (
 		<>
 			<CategoryFilters />
