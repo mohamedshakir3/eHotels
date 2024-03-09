@@ -29,7 +29,7 @@ export default async function SearchResults({
 
 	return (
 		<>
-			<CategoryFilters content={<RoomComponent />} />
+			<CategoryFilters />
 
 			{/* <h1>Search Results</h1>
 			<ul>

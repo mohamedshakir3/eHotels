@@ -22,6 +22,7 @@ import {
 	MinusIcon,
 	PlusIcon,
 	Squares2X2Icon,
+	RectangleStackIcon,
 } from "@heroicons/react/20/solid";
 
 import RoomComponent from "./RoomList";
@@ -94,12 +95,9 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export default function CategoryFilter({
-	content,
-}: Readonly<{
-	content: React.ReactNode;
-}>) {
+export default function CategoryFilter() {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+	const [columns, setColumns] = useState(2);
 
 	return (
 		<div className="bg-white">
@@ -285,7 +283,19 @@ export default function CategoryFilter({
 								className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
 							>
 								<span className="sr-only">View grid</span>
-								<Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
+								{columns == 1 ? (
+									<Squares2X2Icon
+										className="h-5 w-5"
+										aria-hidden="true"
+										onClick={() => setColumns(2)}
+									/>
+								) : (
+									<RectangleStackIcon
+										className="h-5 w-5"
+										aria-hidden="true"
+										onClick={() => setColumns(1)}
+									/>
+								)}
 							</button>
 							<button
 								type="button"
@@ -380,7 +390,7 @@ export default function CategoryFilter({
 							{/* Product grid */}
 							<div className="lg:col-span-3">
 								{/* Content */}
-								{content}
+								<RoomComponent columns={columns} />
 							</div>
 						</div>
 					</section>
