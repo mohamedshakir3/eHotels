@@ -3,12 +3,18 @@
 import React, { useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 
-export default function DatePicker() {
-	const [value, setValue] = useState({
-		startDate: new Date(),
-		endDate: new Date(),
-	});
+type DatePickerProps = {
+	value: { startDate: Date; endDate: Date };
+	setValue: ({
+		startDate,
+		endDate,
+	}: {
+		startDate: Date;
+		endDate: Date;
+	}) => void;
+};
 
+export default function DatePicker({ value, setValue }: DatePickerProps) {
 	const handleValueChange = (newValue: any) => {
 		console.log("newValue:", newValue);
 		setValue(newValue);
