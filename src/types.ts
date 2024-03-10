@@ -10,6 +10,7 @@ export type Room = {
     View: string;
     Amenities: string;
     image_href: string;
+    Category: number;
 };
 
 
