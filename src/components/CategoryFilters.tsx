@@ -13,6 +13,9 @@
   ```
 */
 "use client";
+import { type Room } from "@/types";
+import { type SearchQuery } from "@/types";
+
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -95,9 +98,23 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export default function CategoryFilter() {
+export default function CategoryFilter({
+	rooms,
+	searchParams,
+}: {
+	rooms: Room[];
+	searchParams: SearchQuery;
+}) {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 	const [columns, setColumns] = useState(2);
+
+	console.log(searchParams);
+
+	const filteredRooms: Room[] = rooms.filter((room) => {
+		return room.Country === searchParams.country;
+	});
+
+	console.log(filteredRooms);
 
 	return (
 		<div className="bg-white">
@@ -390,7 +407,7 @@ export default function CategoryFilter() {
 							{/* Product grid */}
 							<div className="lg:col-span-3">
 								{/* Content */}
-								<RoomComponent columns={columns} />
+								<RoomComponent columns={columns} rooms={filteredRooms} />
 							</div>
 						</div>
 					</section>
