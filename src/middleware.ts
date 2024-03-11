@@ -5,6 +5,7 @@ import { decrypt, encrpyt } from "@/lib";
 
 export async function middleware(request: NextRequest) {
 	const session = cookies().get("session")?.value;
+
 	if (!session) return;
 
 	if (request.nextUrl.pathname === "/Bookings" && !session) {
