@@ -61,7 +61,7 @@ export async function login(formData: FormData) {
 		return { error: "Password is incorrect" };
 	}
 
-	const expires = new Date(Date.now() + 10 * 1000);
+	const expires = new Date(Date.now() + 60 * 1000);
 	const session = await encrpyt({ user, expires });
 
 	cookies().set("session", session, { expires, httpOnly: true });
@@ -108,7 +108,7 @@ export async function addUser(formData: FormData) {
 			Password: password,
 		};
 
-		const expires = new Date(Date.now() + 10 * 1000);
+		const expires = new Date(Date.now() + 60 * 1000);
 		const session = await encrpyt({ user, expires });
 
 		cookies().set("session", session, { expires, httpOnly: true });
@@ -131,5 +131,4 @@ export async function updateSession(request: NextRequest) {
 		httpOnly: true,
 		expires: parsed.expires,
 	});
-	return res;
 }
