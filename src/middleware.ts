@@ -3,7 +3,11 @@ import { cookies } from "next/headers";
 import { updateSession } from "./lib";
 
 export async function middleware(request: NextRequest) {
-	await updateSession(request);
+	try {
+		await updateSession(request);
+	} catch (error) {
+		console.log(error);
+	}
 	const response = NextResponse.next();
 
 	const session = cookies().get("session")?.value;
