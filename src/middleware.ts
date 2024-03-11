@@ -4,7 +4,7 @@ import { updateSession } from "./lib";
 
 export async function middleware(request: NextRequest) {
 	try {
-		await updateSession(request);
+		await updateSession();
 	} catch (error) {
 		console.log(error);
 	}

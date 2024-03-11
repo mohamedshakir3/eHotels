@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { Badge } from "flowbite-react";
+import { makeBooking } from "@/lib";
 import { type Room } from "@/types";
 import DatePicker from "./DatePicker";
 
@@ -83,8 +84,12 @@ export default function RoomOverview({
 
 	const [value, setValue] = useState({
 		startDate: new Date(),
-		endDate: new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000),
+		endDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
 	});
+
+	async function validateBooking(formData: FormData) {
+		makeBooking(room, value);
+	}
 
 	const description = `The ${room.HotelName} is a ${
 		room.Category
@@ -211,7 +216,7 @@ export default function RoomOverview({
 							</div>
 						</div>
 
-						<form className="mt-10">
+						<form className="mt-10" action={validateBooking}>
 							{/* Colors */}
 							<div className="mt-4">
 								{issues.length > 0 && (

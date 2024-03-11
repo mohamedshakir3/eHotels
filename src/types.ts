@@ -1,5 +1,7 @@
 export type Room = {
 	RoomID: number;
+	HotelID: number;
+	ChainID: number;
 	HotelName: string;
 	Street: string;
 	City: string;

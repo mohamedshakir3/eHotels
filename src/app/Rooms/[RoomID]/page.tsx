@@ -3,7 +3,7 @@ import RoomOverview from "@/components/RoomOverview";
 
 async function getRoom(id: number) {
 	const query =
-		"SELECT r.RoomID, r.HotelID, h.HotelName, h.Street, h.City, h.PostalCode, h.Category, h.Country, r.Price, r.Capacity, r.View, r.image_href, r.Amenities\
+		"SELECT r.RoomID, r.HotelID, r.ChainID, h.HotelName, h.Street, h.City, h.PostalCode, h.Category, h.Country, r.Price, r.Capacity, r.View, r.image_href, r.Amenities\
     FROM Room r JOIN Hotel h ON r.HotelID = h.HotelID WHERE r.RoomID = ?";
 	const results = await Query(query, [id]);
 	return results;

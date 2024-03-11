@@ -3,6 +3,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
+import { type Room } from "./types";
 
 import mysql from "mysql2/promise";
 import { revalidatePath } from "next/cache";
@@ -117,8 +118,40 @@ export async function addUser(formData: FormData) {
 	}
 }
 
-export async function updateSession(request: NextRequest) {
-	const session = request.cookies.get("session")?.value;
+export async function makeBooking(
+	room: Room,
+	dates: { startDate: Date; endDate: Date }
+) {
+	const session = cookies().get("session")?.value;
+
+	if (!session) return { errror: "Not Logged In!" };
+
+	const parsedSession = await decrypt(session);
+
+	const user = parsedSession.user;
+	console.log(user, room, dates);
+
+	const query =
+		"INSERT INTO Booking (RoomID, HotelID, ChainID, BookingDate, StartDate, EndDate, CustomerID) VALUES (?, ?, ?, ?,?, ?, ?)";
+
+	const values = [
+		room.RoomID,
+		room.HotelID,
+		room.ChainID,
+		new Date(),
+		dates.startDate,
+		dates.endDate,
+		user.CustomerID,
+	];
+
+	console.log(values);
+	const results = await Query(query, values);
+
+	console.log(results);
+}
+
+export async function updateSession() {
+	const session = cookies().get("session")?.value;
 	if (!session) return;
 
 	const parsed = await decrypt(session);
