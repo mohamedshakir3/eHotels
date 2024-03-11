@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
+import { getSession, logout } from "@/lib";
+
 import {
 	ArrowPathIcon,
 	Bars3Icon,
@@ -61,9 +63,8 @@ function classNames(...classes: any[]) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Header({ user }: { user: any }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
 	return (
 		<header className="bg-white">
 			<nav
@@ -142,20 +143,33 @@ export default function Example() {
 					<a href="#" className="text-sm font-semibold leading-6 text-gray-900">
 						Views
 					</a>
-					<a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+					<Link
+						href="/Bookings"
+						className="text-sm font-semibold leading-6 text-gray-900"
+					>
 						Bookings
-					</a>
+					</Link>
 					<a href="#" className="text-sm font-semibold leading-6 text-gray-900">
 						About
 					</a>
 				</Popover.Group>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-					<Link
-						href="/Login"
-						className="text-sm font-semibold leading-6 text-gray-900"
-					>
-						Log in <span aria-hidden="true">&rarr;</span>
-					</Link>
+					{!user ? (
+						<Link
+							href="/Login"
+							className="text-sm font-semibold leading-6 text-gray-900"
+						>
+							Log in <span aria-hidden="true">&rarr;</span>
+						</Link>
+					) : (
+						<Link
+							href="/"
+							className="text-sm font-semibold leading-6 text-gray-900"
+							onClick={() => logout()}
+						>
+							Logout <span aria-hidden="true">&rarr;</span>
+						</Link>
+					)}
 				</div>
 			</nav>
 			<Dialog

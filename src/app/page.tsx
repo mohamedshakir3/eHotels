@@ -1,5 +1,9 @@
 import SearchBar from "@/components/SearchBar";
-export default function Home() {
+import { getSession } from "@/lib";
+
+export default async function Home() {
+	const auth = await getSession();
+
 	return (
 		<div>
 			<div className="relative isolate px-6 pt-14 lg:px-8">

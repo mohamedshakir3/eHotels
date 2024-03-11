@@ -11,6 +11,7 @@ export type Room = {
     Amenities: string;
     image_href: string;
     Category: number;
+    Extendable: boolean;
 };
 
 

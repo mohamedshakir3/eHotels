@@ -17,6 +17,14 @@ async function getHrefs(id: number) {
 	return results;
 }
 
+async function getIssues(id: number) {
+	const query = "SELECT * FROM Issue WHERE RoomID = ?";
+
+	const results = await Query(query, [id]);
+
+	return results;
+}
+
 export default async function RoomDetails({
 	params,
 }: {
@@ -27,7 +35,11 @@ export default async function RoomDetails({
 	const hotelID = room[0]?.HotelID;
 
 	const hrefs: any = await getHrefs(hotelID);
-	console.log(hrefs);
+
+	const issues: any = await getIssues(parseInt(params.RoomID));
+
+	console.log(issues);
+
 	return (
 		<>
 			{/* <h1>Room Details</h1>
@@ -41,7 +53,7 @@ export default async function RoomDetails({
 			<p>{room[0].View}</p>
 			<p>{room[0].Amenities}</p>
 			<p>{room[0].image_href}</p> */}
-			<RoomOverview room={room[0]} hrefs={hrefs ? hrefs : []} />
+			<RoomOverview room={room[0]} hrefs={hrefs ? hrefs : []} issues={issues} />
 		</>
 	);
 }
