@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrpyt(payload: any) {
+export async function encrypt(payload: any) {
 	return await new SignJWT(payload)
 		.setProtectedHeader({ alg: "HS256" })
 		.setIssuedAt()
@@ -63,7 +63,7 @@ export async function login(formData: FormData) {
 	}
 
 	const expires = new Date(Date.now() + 10 * 1000);
-	const session = await encrpyt({ user, expires });
+	const session = await encrypt({ user, expires });
 
 	cookies().set("session", session, { expires, httpOnly: true });
 }
@@ -110,7 +110,7 @@ export async function addUser(formData: FormData) {
 		};
 
 		const expires = new Date(Date.now() + 10 * 1000);
-		const session = await encrpyt({ user, expires });
+		const session = await encrypt({ user, expires });
 
 		cookies().set("session", session, { expires, httpOnly: true });
 	} catch (error) {
@@ -156,7 +156,7 @@ export async function updateSession() {
 
 	res.cookies.set({
 		name: "session",
-		value: await encrpyt(parsed),
+		value: await encrypt(parsed),
 		httpOnly: true,
 		expires: parsed.expires,
 	});
