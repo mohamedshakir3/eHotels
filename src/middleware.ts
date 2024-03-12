@@ -12,15 +12,12 @@ export async function middleware(request: NextRequest) {
 	if (!session) return;
 
 	const parsed = await decrypt(session);
-
 	const res = NextResponse.next();
 
-	res.cookies.set({
-		name: "session",
-		value: await encrypt(parsed),
-		httpOnly: true,
-		expires: parsed.expires,
-	});
+	const expires = new Date(Date.now() + 10 * 1000);
+	const updatedSession = await encrypt({ parsed, expires });
+
+	res.cookies.set("session", updatedSession, { expires, httpOnly: true });
 
 	return res;
 }
