@@ -1,10 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { cookies } from "next/headers";
 
-export async function middleware(request: NextRequest) {
-	const session = cookies().get("session")?.value;
-	if (!session) return;
+export function middleware(request: NextRequest) {
+	const session = request.cookies.get("session")?.value;
+
 	if (request.nextUrl.pathname === "/Bookings" && !session) {
-		return NextResponse.redirect(new URL("/Login", request.nextUrl));
+		console.log("Redirecting to Login");
+		return NextResponse.redirect(new URL("/Login", request.url));
 	}
+
+	if (!session) return;
 }

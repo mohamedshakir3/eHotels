@@ -38,8 +38,6 @@ export default async function RoomDetails({
 
 	const issues: any = await getIssues(parseInt(params.RoomID));
 
-	console.log(issues);
-
 	return (
 		<>
 			{/* <h1>Room Details</h1>

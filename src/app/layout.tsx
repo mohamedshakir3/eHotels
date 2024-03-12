@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
-import { getSession } from "@/lib";
+import { getSession, updateSession } from "@/lib";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const auth = await getSession();
-
+	await updateSession();
 	return (
 		<html className="h-full bg-white" lang="en">
 			<body>

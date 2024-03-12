@@ -62,7 +62,7 @@ export async function login(formData: FormData) {
 		return { error: "Password is incorrect" };
 	}
 
-	const expires = new Date(Date.now() + 60 * 1000);
+	const expires = new Date(Date.now() + 10 * 1000);
 	const session = await encrpyt({ user, expires });
 
 	cookies().set("session", session, { expires, httpOnly: true });
@@ -109,7 +109,7 @@ export async function addUser(formData: FormData) {
 			Password: password,
 		};
 
-		const expires = new Date(Date.now() + 60 * 1000);
+		const expires = new Date(Date.now() + 10 * 1000);
 		const session = await encrpyt({ user, expires });
 
 		cookies().set("session", session, { expires, httpOnly: true });
@@ -129,7 +129,6 @@ export async function makeBooking(
 	const parsedSession = await decrypt(session);
 
 	const user = parsedSession.user;
-	console.log(user, room, dates);
 
 	const query =
 		"INSERT INTO Booking (RoomID, HotelID, ChainID, BookingDate, StartDate, EndDate, CustomerID) VALUES (?, ?, ?, ?,?, ?, ?)";
@@ -144,10 +143,7 @@ export async function makeBooking(
 		user.CustomerID,
 	];
 
-	console.log(values);
 	const results = await Query(query, values);
-
-	console.log(results);
 }
 
 export async function updateSession() {

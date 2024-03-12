@@ -108,13 +108,9 @@ export default function CategoryFilter({
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 	const [columns, setColumns] = useState(2);
 
-	console.log(searchParams);
-
 	const filteredRooms: Room[] = rooms.filter((room) => {
 		return room.Country === searchParams.country;
 	});
-
-	console.log(filteredRooms);
 
 	return (
 		<div className="bg-white">
