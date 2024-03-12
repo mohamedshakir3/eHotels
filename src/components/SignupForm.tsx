@@ -70,7 +70,7 @@ export default function SignupForm() {
 
 			toast.success("Account created successfully!");
 		} catch (error) {
-			console.log(error);
+			toast.error("Something went wrong!");
 			return;
 		}
 		redirect("/Bookings");

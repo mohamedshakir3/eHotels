@@ -28,3 +28,27 @@ export type User = {
 	CustomerName: string;
 	Password: string;
 };
+
+export type Booking = {
+	BookingID: number;
+	RoomID: number;
+	HotelID: number;
+	ChainID: number;
+	BookingDate: Date;
+	CustomerID: number;
+	StartDate: Date;
+	EndDate: Date;
+	Price: number;
+	HotelName: string;
+	Street: string;
+	City: string;
+	PostalCode: string;
+	Country: string;
+	Capacity: number;
+	View: string;
+	Amenities: string;
+	IssueDescription: string;
+	image_href: string;
+	Category: number;
+	Extendable: boolean;
+};

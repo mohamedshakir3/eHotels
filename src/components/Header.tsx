@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
-import { getSession, logout } from "@/lib";
+import { logout } from "@/lib";
+import { toast } from "react-hot-toast";
 
 import {
 	ArrowPathIcon,
@@ -65,6 +66,16 @@ function classNames(...classes: any[]) {
 
 export default function Header({ user }: { user: any }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+	const clientLogout = async () => {
+		const res = await logout();
+		if (res?.error) {
+			toast.error("Something went wrong!");
+			return;
+		}
+		toast.success("Logged out successfully!");
+	};
+
 	return (
 		<header className="bg-white">
 			<nav
@@ -165,7 +176,7 @@ export default function Header({ user }: { user: any }) {
 						<Link
 							href="/"
 							className="text-sm font-semibold leading-6 text-gray-900"
-							onClick={() => logout()}
+							onClick={() => clientLogout()}
 						>
 							Logout <span aria-hidden="true">&rarr;</span>
 						</Link>

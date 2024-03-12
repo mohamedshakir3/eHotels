@@ -62,14 +62,19 @@ export async function login(formData: FormData) {
 		return { error: "Password is incorrect" };
 	}
 
-	const expires = new Date(Date.now() + 10 * 1000);
+	const expires = new Date(Date.now() + 3600 * 1000);
 	const session = await encrypt({ user, expires });
 
 	cookies().set("session", session, { expires, httpOnly: true });
 }
 
 export async function logout() {
-	cookies().set("session", "", { expires: new Date(0) });
+	try {
+		cookies().set("session", "", { expires: new Date(0) });
+		return;
+	} catch (error) {
+		return { error: "Something went wrong!" };
+	}
 }
 
 export async function getSession() {
@@ -109,7 +114,7 @@ export async function addUser(formData: FormData) {
 			Password: password,
 		};
 
-		const expires = new Date(Date.now() + 10 * 1000);
+		const expires = new Date(Date.now() + 3600 * 1000);
 		const session = await encrypt({ user, expires });
 
 		cookies().set("session", session, { expires, httpOnly: true });
@@ -143,7 +148,61 @@ export async function makeBooking(
 		user.CustomerID,
 	];
 
-	const results = await Query(query, values);
+	const results: any = await Query(query, values);
+
+	if (results.error) {
+		console.log("Something went wrong!");
+	}
+	console.log(results.insertId);
+}
+
+export async function getBookings() {
+	const session = await getSession();
+
+	if (!session) {
+		redirect("/login");
+		return { error: "Not Logged In!" };
+	}
+
+	const user = session.user;
+
+	const query = `SELECT 
+					b.BookingID, 
+					b.RoomID, 
+					b.HotelID, 
+					b.ChainID, 
+					b.CustomerID, 
+					b.EndDate, 
+					b.BookingDate, 
+					b.StartDate, 
+					h.HotelName, 
+					h.Street,
+					h.City,
+					h.PostalCode,
+					h.Country,
+					h.Category,
+					r.Capacity,
+					r.View,
+					r.Extendable,
+					r.Amenities,
+					r.Price,
+					r.image_href,
+					i.IssueDescription
+					FROM 
+						Booking b
+					JOIN 
+						Hotel h ON b.HotelID = h.HotelID
+					JOIN 
+						Room r ON b.RoomID = r.RoomID
+					LEFT JOIN 
+						Issue i ON b.RoomID = i.RoomID
+					WHERE
+						b.CustomerID = ?;
+					`;
+
+	const results = await Query(query, [user.CustomerID]);
+
+	return results;
 }
 
 export async function updateSession() {

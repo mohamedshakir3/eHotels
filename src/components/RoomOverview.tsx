@@ -75,9 +75,6 @@ export default function RoomOverview({
 	}>;
 	issues: Array<{ IssueID: number; RoomID: number; IssueDescription: string }>;
 }) {
-	const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-	const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
-
 	hrefs = hrefs ? hrefs : [{ image_href: "" }];
 
 	const ammenities = room.Amenities.split(",");
