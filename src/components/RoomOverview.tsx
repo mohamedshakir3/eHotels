@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { RadioGroup } from "@headlessui/react";
+import { redirect } from "next/navigation";
 import { Badge } from "flowbite-react";
+import { toast } from "react-hot-toast";
 import { makeBooking } from "@/lib";
 import { type Room } from "@/types";
 import DatePicker from "./DatePicker";
@@ -85,7 +86,13 @@ export default function RoomOverview({
 	});
 
 	async function validateBooking(formData: FormData) {
-		makeBooking(room, value);
+		const res = await makeBooking(room, value);
+		if (res?.error) {
+			toast.error(res.error);
+		} else {
+			toast.success("Booking Successful! Redirecting...");
+			redirect("/Bookings");
+		}
 	}
 
 	const description = `The ${room.HotelName} is a ${

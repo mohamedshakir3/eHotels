@@ -23,9 +23,9 @@ export default function Home() {
 						className="space-y-6"
 						action={async (formData) => {
 							"use server";
-							await login(formData);
+							const res: any = await login(formData);
 							revalidatePath("/", "layout");
-							redirect("/");
+							redirect(res);
 						}}
 					>
 						<div>

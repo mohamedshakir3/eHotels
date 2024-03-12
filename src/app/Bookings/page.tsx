@@ -1,6 +1,7 @@
-import { getBookings } from "@/lib";
+import { getBookings, getSession } from "@/lib";
 import { type Booking } from "@/types";
 import Link from "next/link";
+import BookingHeader from "@/components/BookingHeader";
 
 function formatDate(date: Date) {
 	const months = [
@@ -23,12 +24,17 @@ function formatDate(date: Date) {
 
 export default async function Bookings() {
 	const bookings: any = await getBookings();
+	const session = await getSession();
+	const user = session.user;
+
 	return (
 		<div className="mx-auto max-w-4xl">
+			<BookingHeader user={user} />
+
 			<ul role="list" className="divide-y divide-gray-100">
 				{bookings.map((booking: Booking) => (
 					<li
-						key={`${booking.Street}, ${booking.City}, ${booking.PostalCode}, ${booking.Country}`}
+						key={booking.BookingID}
 						className="flex justify-between gap-x-6 py-5"
 					>
 						<div className="flex min-w-0 gap-x-4">

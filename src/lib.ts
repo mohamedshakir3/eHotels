@@ -66,6 +66,12 @@ export async function login(formData: FormData) {
 	const session = await encrypt({ user, expires });
 
 	cookies().set("session", session, { expires, httpOnly: true });
+
+	if (cookies().get("booking")) {
+		return "/Bookings";
+	} else {
+		return "/";
+	}
 }
 
 export async function logout() {
@@ -129,7 +135,15 @@ export async function makeBooking(
 ) {
 	const session = cookies().get("session")?.value;
 
-	if (!session) return { errror: "Not Logged In!" };
+	if (!session) {
+		const booking = { room, dates };
+		const expires = new Date(Date.now() + 3600 * 1000);
+		cookies().set("booking", await encrypt({ booking, expires }), {
+			expires,
+			httpOnly: true,
+		});
+		return redirect("/Login");
+	}
 
 	const parsedSession = await decrypt(session);
 
@@ -147,13 +161,12 @@ export async function makeBooking(
 		dates.endDate,
 		user.CustomerID,
 	];
-
-	const results: any = await Query(query, values);
-
-	if (results.error) {
-		console.log("Something went wrong!");
+	try {
+		const results: any = await Query(query, values);
+		return;
+	} catch (error) {
+		return { error: "Something went wrong!" };
 	}
-	console.log(results.insertId);
 }
 
 export async function getBookings() {
@@ -201,7 +214,6 @@ export async function getBookings() {
 					`;
 
 	const results = await Query(query, [user.CustomerID]);
-
 	return results;
 }
 
