@@ -15,9 +15,9 @@
 "use client";
 import { type Room } from "@/types";
 import { type SearchQuery } from "@/types";
-
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import { RangeSlider } from "flowbite-react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
 	ChevronDownIcon,
@@ -46,50 +46,38 @@ const subCategories = [
 ];
 const filters = [
 	{
-		id: "color",
+		id: "Amenities",
 		name: "Amenities",
 		options: [
-			{ value: "white", label: "White", checked: false },
-			{ value: "beige", label: "Beige", checked: false },
-			{ value: "blue", label: "Blue", checked: true },
-			{ value: "brown", label: "Brown", checked: false },
-			{ value: "green", label: "Green", checked: false },
-			{ value: "purple", label: "Purple", checked: false },
+			{ value: "Wi-Fi", label: "Wi-Fi", checked: true },
+			{ value: "Gym", label: "Gym", checked: false },
+			{ value: "Tennis Court", label: "Tennis Court", checked: false },
+			{ value: "Pool", label: "Pool", checked: false },
+			{ value: "Spa", label: "Spa", checked: false },
+			{ value: "Balcony", label: "Balcony", checked: false },
 		],
 	},
 	{
-		id: "category",
-		name: "Category",
-		options: [
-			{ value: "new-arrivals", label: "New Arrivals", checked: false },
-			{ value: "sale", label: "Sale", checked: false },
-			{ value: "travel", label: "Travel", checked: true },
-			{ value: "organization", label: "Organization", checked: false },
-			{ value: "accessories", label: "Accessories", checked: false },
-		],
-	},
-	{
-		id: "size",
+		id: "Stars",
 		name: "Stars",
 		options: [
-			{ value: "2l", label: "2L", checked: false },
-			{ value: "6l", label: "6L", checked: false },
-			{ value: "12l", label: "12L", checked: false },
-			{ value: "18l", label: "18L", checked: false },
-			{ value: "20l", label: "20L", checked: false },
-			{ value: "40l", label: "40L", checked: true },
+			{ value: 1, label: "1", checked: false },
+			{ value: 2, label: "2", checked: false },
+			{ value: 3, label: "3", checked: false },
+			{ value: 4, label: "4", checked: true },
+			{ value: 5, label: "5", checked: false },
 		],
 	},
 	{
 		id: "People",
 		name: "Number of People",
 		options: [
-			{ value: "2l", label: "2L", checked: false },
-			{ value: "6l", label: "6L", checked: false },
-			{ value: "12l", label: "12L", checked: false },
-			{ value: "18l", label: "18L", checked: false },
-			{ value: "20l", label: "20L", checked: false },
-			{ value: "40l", label: "40L", checked: true },
+			{ value: 1, label: "1", checked: false },
+			{ value: 2, label: "2", checked: true },
+			{ value: 4, label: "4", checked: false },
+			{ value: 6, label: "6", checked: false },
+			{ value: 8, label: "8", checked: false },
+			{ value: 10, label: "10", checked: false },
 		],
 	},
 ];
@@ -108,9 +96,72 @@ export default function CategoryFilter({
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 	const [columns, setColumns] = useState(2);
 
-	const filteredRooms: Room[] = rooms.filter((room) => {
-		return room.Country === searchParams.country;
+	const [filteredRooms, setFilteredRooms] = useState(rooms);
+
+	const [filter, setFilter] = useState({
+		country: searchParams.country,
+		Amenities: ["Wi-Fi"],
+		People: 2,
+		Stars: 4,
 	});
+
+	const handleFilterChange = (e) => {
+		if (e.target.name === "Amenities") {
+			if (filter.Amenities.includes(e.target.value)) {
+				setFilter({
+					...filter,
+					Amenities: filter.Amenities.filter(
+						(amenity) => amenity !== e.target.value
+					),
+				});
+			} else {
+				setFilter({
+					...filter,
+					Amenities: [...filter.Amenities, e.target.value],
+				});
+			}
+		} else {
+			setFilter({ ...filter, [e.target.name]: parseInt(e.target.value) });
+		}
+	};
+
+	useEffect(() => {
+		setFilteredRooms(
+			rooms.filter((room) => {
+				return (
+					room.Country === filter.country &&
+					filter.Amenities.some((amenity) =>
+						room.Amenities.includes(amenity)
+					) &&
+					room.Capacity >= filter.People &&
+					room.Category >= filter.Stars
+				);
+			})
+		);
+	}, [filter]);
+	const roomElems = filteredRooms.map((room) => (
+		<div key={room.RoomID} className="group relative">
+			<div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+				<img
+					src={room.image_href}
+					alt={room.HotelName}
+					className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+				/>
+			</div>
+			<div className="mt-4 flex justify-between">
+				<div>
+					<h3 className="text-sm text-gray-700">
+						<a href={`Rooms/${room.RoomID}`}>
+							<span aria-hidden="true" className="absolute inset-0" />
+							{room.HotelName}
+						</a>
+					</h3>
+					<p className="mt-1 text-sm text-gray-500">{room.Amenities}</p>
+				</div>
+				<p className="text-sm font-medium text-gray-900">{`\$${room.Price}`}</p>
+			</div>
+		</div>
+	));
 
 	return (
 		<div className="bg-white">
@@ -212,7 +263,8 @@ export default function CategoryFilter({
 																	>
 																		<input
 																			id={`filter-mobile-${section.id}-${optionIdx}`}
-																			name={`${section.id}[]`}
+																			onChange={handleFilterChange}
+																			name={`${section.id}`}
 																			defaultValue={option.value}
 																			type="checkbox"
 																			defaultChecked={option.checked}
@@ -376,14 +428,27 @@ export default function CategoryFilter({
 																key={option.value}
 																className="flex items-center"
 															>
-																<input
-																	id={`filter-${section.id}-${optionIdx}`}
-																	name={`${section.id}[]`}
-																	defaultValue={option.value}
-																	type="checkbox"
-																	defaultChecked={option.checked}
-																	className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-																/>
+																{section.id === "Amenities" ? (
+																	<input
+																		id={`filter-${section.id}-${optionIdx}`}
+																		name={`${section.id}`}
+																		defaultValue={option.value}
+																		type="checkbox"
+																		onChange={handleFilterChange}
+																		defaultChecked={option.checked}
+																		className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+																	/>
+																) : (
+																	<input
+																		id={`filter-${section.id}-${optionIdx}`}
+																		name={`${section.id}`}
+																		defaultValue={option.value}
+																		type="radio"
+																		onChange={handleFilterChange}
+																		defaultChecked={option.checked}
+																		className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+																	/>
+																)}
 																<label
 																	htmlFor={`filter-${section.id}-${optionIdx}`}
 																	className="ml-3 text-sm text-gray-600"
@@ -403,7 +468,23 @@ export default function CategoryFilter({
 							{/* Product grid */}
 							<div className="lg:col-span-3">
 								{/* Content */}
-								<RoomComponent columns={columns} rooms={filteredRooms} />
+								<div className="bg-white">
+									<div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+										{columns === 1 ? (
+											<div
+												className={`mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-1 lg:grid-cols-1 xl:gap-x-8`}
+											>
+												{roomElems}
+											</div>
+										) : (
+											<div
+												className={`mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8`}
+											>
+												{roomElems}
+											</div>
+										)}
+									</div>
+								</div>
 							</div>
 						</div>
 					</section>

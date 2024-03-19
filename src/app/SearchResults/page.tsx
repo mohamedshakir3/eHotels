@@ -5,7 +5,7 @@ import RoomComponent from "@/components/RoomList";
 
 async function getRooms() {
 	const query =
-		"SELECT r.RoomID, r.HotelID, h.HotelName, h.Street, h.City, h.PostalCode, h.Country, r.Price, r.Extendable, r.Capacity, r.View, r.image_href, r.Amenities FROM Room r JOIN Hotel h ON r.HotelID = h.HotelID;";
+		"SELECT r.RoomID, r.HotelID, h.HotelName, h.Street, h.City, h.PostalCode, h.Country, r.Price, r.Extendable,h.Category, r.Capacity, r.View, r.image_href, r.Amenities FROM Room r JOIN Hotel h ON r.HotelID = h.HotelID;";
 	const results = await Query(query);
 	return results;
 }

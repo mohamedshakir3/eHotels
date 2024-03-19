@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
 import { getSession, updateSession } from "@/lib";
+import { ChakraProvider } from "@chakra-ui/react";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,7 +25,7 @@ export default async function RootLayout({
 			<body>
 				<div>
 					<Header user={auth} />
-					{children}
+					<ChakraProvider cssVarsRoot="body">{children}</ChakraProvider>
 					<Toaster position="top-right" />
 				</div>
 			</body>
