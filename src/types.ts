@@ -26,6 +26,9 @@ export type User = {
 	CustomerID: number;
 	Email: string;
 	CustomerName: string;
+	Address: string;
+	SSN: string;
+	RegistrationDate: Date;
 	Password: string;
 };
 

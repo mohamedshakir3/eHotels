@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import { logout } from "@/lib";
 import { toast } from "react-hot-toast";
-
+import HeaderOptions from "@/components/HeaderOptions";
 import {
 	ArrowPathIcon,
 	Bars3Icon,
@@ -15,6 +15,7 @@ import {
 	SquaresPlusIcon,
 	XMarkIcon,
 	HomeModernIcon,
+	UserIcon,
 } from "@heroicons/react/24/outline";
 
 import {
@@ -176,13 +177,14 @@ export default function Header({ user }: { user: any }) {
 							Log in <span aria-hidden="true">&rarr;</span>
 						</Link>
 					) : (
-						<Link
-							href="/"
-							className="text-sm font-semibold leading-6 text-gray-900"
-							onClick={() => clientLogout()}
-						>
-							Logout <span aria-hidden="true">&rarr;</span>
-						</Link>
+						// <Link
+						// 	href="/"
+						// 	className="text-sm font-semibold leading-6 text-gray-900"
+						// 	onClick={() => clientLogout()}
+						// >
+						// 	Logout <span aria-hidden="true">&rarr;</span>
+						// </Link>
+						<HeaderOptions clientLogout={clientLogout} />
 					)}
 				</div>
 			</nav>
@@ -262,13 +264,32 @@ export default function Header({ user }: { user: any }) {
 									About
 								</a>
 							</div>
-							<div className="py-6">
-								<Link
-									href="/Login"
-									className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-								>
-									Log in
-								</Link>
+							<div className="space-y-2 py-6">
+								{!user ? (
+									<Link
+										href="/Login"
+										className="text-sm font-semibold leading-6 text-gray-900"
+									>
+										Log in <span aria-hidden="true">&rarr;</span>
+									</Link>
+								) : (
+									<>
+										<Link
+											href="/Profile"
+											className="-mx-3 block rounded-lg px-3 py-2 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+										>
+											Profile <span aria-hidden="true">&rarr;</span>
+										</Link>
+
+										<Link
+											href="/"
+											className="-mx-3 block rounded-lg px-3 py-2 text-sm font-semibold  leading-6 text-gray-900 hover:bg-gray-50"
+											onClick={() => clientLogout()}
+										>
+											Logout <span aria-hidden="true">&rarr;</span>
+										</Link>
+									</>
+								)}
 							</div>
 						</div>
 					</div>

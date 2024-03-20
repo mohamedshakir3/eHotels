@@ -28,8 +28,6 @@ import {
 	RectangleStackIcon,
 } from "@heroicons/react/20/solid";
 
-import RoomComponent from "./RoomList";
-
 const sortOptions = [
 	{ name: "Most Popular", href: "#", current: true },
 	{ name: "Best Rating", href: "#", current: false },
@@ -261,15 +259,27 @@ export default function CategoryFilter({
 																		key={option.value}
 																		className="flex items-center"
 																	>
-																		<input
-																			id={`filter-mobile-${section.id}-${optionIdx}`}
-																			onChange={handleFilterChange}
-																			name={`${section.id}`}
-																			defaultValue={option.value}
-																			type="checkbox"
-																			defaultChecked={option.checked}
-																			className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-																		/>
+																		{section.id == "Amenities" ? (
+																			<input
+																				id={`filter-mobile-${section.id}-${optionIdx}`}
+																				onChange={handleFilterChange}
+																				name={`${section.id}`}
+																				defaultValue={option.value}
+																				type="checkbox"
+																				defaultChecked={option.checked}
+																				className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+																			/>
+																		) : (
+																			<input
+																				id={`filter-mobile-${section.id}-${optionIdx}`}
+																				onChange={handleFilterChange}
+																				name={`${section.id}`}
+																				defaultValue={option.value}
+																				type="radio"
+																				defaultChecked={option.checked}
+																				className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+																			/>
+																		)}
 																		<label
 																			htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
 																			className="ml-3 min-w-0 flex-1 text-gray-500"

@@ -3,7 +3,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { type Room } from "./types";
+import { type Room, type User } from "./types";
 
 import mysql from "mysql2/promise";
 import { revalidatePath } from "next/cache";
@@ -104,13 +104,16 @@ export async function addUser(formData: FormData) {
 	} = Object.fromEntries(formData);
 
 	const query =
-		"INSERT INTO Customer (CustomerName, Email, Password) VALUES (?, ?, ?)";
+		"INSERT INTO Customer (CustomerName, Email, Password, RegistrationDate, SSN, Address) VALUES (?, ?, ?,?, ?, ?)";
 
 	try {
 		const results: any = await Query(query, [
 			`${firstname} ${lastname}`,
 			email,
 			password,
+			new Date(),
+			ssn,
+			`${streetaddress}, ${city}, ${region}, ${postalcode}`,
 		]);
 
 		const user = {
@@ -118,12 +121,40 @@ export async function addUser(formData: FormData) {
 			CustomerName: `${firstname} ${lastname}`,
 			Email: email,
 			Password: password,
+			RegistrationDate: new Date(),
+			SSN: ssn,
+			Address: `${streetaddress}, ${city}, ${region}, ${postalcode}`,
 		};
 
 		const expires = new Date(Date.now() + 3600 * 1000);
 		const session = await encrypt({ user, expires });
 
 		cookies().set("session", session, { expires, httpOnly: true });
+	} catch (error) {
+		return { error: "Something went wrong!" };
+	}
+}
+
+export async function updateUser(user: User) {
+	const query =
+		"UPDATE Customer SET CustomerName = ?, Address = ?, RegistrationDate = ?, SSN = ?, Email = ?, Password = ? WHERE CustomerID = ?";
+	const values = [
+		user.CustomerName,
+		user.Address,
+		user.RegistrationDate,
+		user.SSN,
+		user.Email,
+		user.Password,
+		user.CustomerID,
+	];
+
+	try {
+		await Query(query, values);
+		const expires = new Date(Date.now() + 3600 * 1000);
+		const session = await encrypt({ user, expires });
+
+		cookies().set("session", session, { expires, httpOnly: true });
+		return { success: "User updated successfully!" };
 	} catch (error) {
 		return { error: "Something went wrong!" };
 	}
