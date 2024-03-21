@@ -1,7 +1,6 @@
 import { Query } from "@/lib";
 import { type SearchQuery } from "@/types";
 import CategoryFilters from "@/components/CategoryFilters";
-import RoomComponent from "@/components/RoomList";
 
 async function getRooms() {
 	const query =
