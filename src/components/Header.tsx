@@ -27,37 +27,37 @@ import {
 
 const chains = [
 	{
+		name: "Wyndham",
+		description:
+			"Global leader, 9300 hotels, diverse accommodations across 75 countries",
+		href: "/Chains/1",
+		icon: HomeIcon,
+	},
+	{
+		name: "Marriot",
+		description:
+			"7500 hotels, luxury to midscale options, spanning 131 countries",
+		href: "/Chains/2",
+		icon: HomeModernIcon,
+	},
+	{
+		name: "Choice Hotels",
+		description: "Established 1939, 7100 hotels, upscale to economy choices",
+		href: "/Chains/3",
+		icon: SquaresPlusIcon,
+	},
+	{
 		name: "Hilton",
 		description: "Prestigious, 6200 hotels, luxury to midscale, 118 countries",
-		href: "#",
+		href: "/Chains/4",
 		icon: ChartPieIcon,
 	},
 	{
 		name: "InterContinental",
 		description:
 			"Established 1946, 5700 hotels, luxury to midscale, 100 countries",
-		href: "#",
+		href: "/Chains/5",
 		icon: CursorArrowRaysIcon,
-	},
-	{
-		name: "Marriot",
-		description:
-			"7500 hotels, luxury to midscale options, spanning 131 countries",
-		href: "#",
-		icon: HomeModernIcon,
-	},
-	{
-		name: "Choice Hotels",
-		description: "Established 1939, 7100 hotels, upscale to economy choices",
-		href: "#",
-		icon: SquaresPlusIcon,
-	},
-	{
-		name: "Wyndham",
-		description:
-			"Global leader, 9300 hotels, diverse accommodations across 75 countries",
-		href: "#",
-		icon: HomeIcon,
 	},
 ];
 

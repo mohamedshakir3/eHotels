@@ -1,7 +1,7 @@
-import { getBookings, getSession } from "@/lib";
-import { type Booking } from "@/types";
+import { getBookings, getSession, getRentings } from "@/lib";
+import { type Booking, type Employee } from "@/types";
 import Link from "next/link";
-import BookingHeader from "@/components/BookingHeader";
+import Bookings from "@/components/Bookings";
 
 function formatDate(date: Date) {
 	const months = [
@@ -22,67 +22,17 @@ function formatDate(date: Date) {
 	return `${months[date.getMonth()]}, ${date.getDate()}, ${date.getFullYear()}`;
 }
 
-export default async function Bookings() {
+export default async function page() {
 	const bookings: any = await getBookings();
+	const rentings: any = await getRentings();
 	const session = await getSession();
 	const user = session.user;
 
-	return (
-		<div className="mx-auto max-w-4xl">
-			<BookingHeader user={user} />
+	console.log(rentings);
 
-			<ul role="list" className="divide-y divide-gray-100">
-				{bookings.map((booking: Booking) => (
-					<li
-						key={booking.BookingID}
-						className="flex justify-between gap-x-6 py-5"
-					>
-						<div className="flex min-w-0 gap-x-4">
-							<Link href={`Rooms/${booking.RoomID}`}>
-								<img
-									className="h-36 w-48 flex-none rounded-md bg-gray-50"
-									src={booking.image_href}
-									alt=""
-								/>
-							</Link>
-							<div className="min-w-0 flex-auto">
-								<p className="text-sm font-semibold leading-6 text-gray-900">
-									{booking.HotelName}
-								</p>
-								<p className="mt-1 truncate text-xs leading-5 text-gray-500">
-									{`${booking.Street}, ${booking.City}, ${booking.PostalCode}, ${booking.Country}`}
-								</p>
-								<p className="mt-1 text-xs leading-5 text-gray-500">
-									{`Capacity: ${booking.Capacity} View: ${booking.View} Category: ${booking.Category} Stars`}
-								</p>
-								<p className="mt-1 text-xs leading-5 text-gray-500">
-									{`Amenities: ${booking.Amenities}`}
-								</p>
-								<p className="mt-1 text-xs leading-5 text-gray-500">
-									{booking.Extendable ? "Extendable" : "Not Extendable"}
-								</p>
-							</div>
-						</div>
-						<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-							<p className="text-sm leading-6 text-gray-900">{`Start Date: ${formatDate(
-								booking.StartDate
-							)}`}</p>
-							<p className="text-sm leading-6 text-gray-900">{`End Date: ${formatDate(
-								booking.EndDate
-							)}`}</p>
+	if (user?.HiringDate) {
+		const employee: Employee = user;
+	}
 
-							<div className="mt-1 flex items-center gap-x-1.5">
-								<div className="flex-none rounded-full bg-emerald-500/20 p-1">
-									<div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-								</div>
-								<p className="text-xs leading-5 text-gray-500">
-									Price: ${booking.Price}
-								</p>
-							</div>
-						</div>
-					</li>
-				))}
-			</ul>
-		</div>
-	);
+	return <Bookings bookings={bookings} rentings={rentings} user={user} />;
 }

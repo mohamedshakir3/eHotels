@@ -15,5 +15,9 @@ export function middleware(request: NextRequest) {
 		return NextResponse.redirect(new URL("/Login", request.url));
 	}
 
+	if (request.nextUrl.pathname === "/Signup" && session) {
+		return NextResponse.redirect(new URL("/", request.url));
+	}
+
 	if (!session) return;
 }

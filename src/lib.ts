@@ -3,7 +3,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { type Room, type User } from "./types";
+import { type Room, type Customer } from "./types";
 
 import mysql from "mysql2/promise";
 import { revalidatePath } from "next/cache";
@@ -48,11 +48,13 @@ export async function decrypt(input: string): Promise<any> {
 export async function login(formData: FormData) {
 	const { email, password } = Object.fromEntries(formData);
 
-	const results: any = await Query("SELECT * FROM Customer WHERE email = ?", [
-		email,
-	]);
+	const results: any = await Query(
+		"SELECT * FROM CustomerEmployeeView WHERE email = ?",
+		[email]
+	);
 
 	const user = results[0];
+	console.log(user);
 
 	if (!user) {
 		return { error: "User not found" };
@@ -135,27 +137,31 @@ export async function addUser(formData: FormData) {
 	}
 }
 
-export async function updateUser(user: User) {
+export async function updateUser(user: Customer) {
+	console.log(user);
 	const query =
 		"UPDATE Customer SET CustomerName = ?, Address = ?, RegistrationDate = ?, SSN = ?, Email = ?, Password = ? WHERE CustomerID = ?";
 	const values = [
-		user.CustomerName,
+		user.Name,
 		user.Address,
-		user.RegistrationDate,
+		new Date(user.RegistrationDate),
 		user.SSN,
 		user.Email,
 		user.Password,
-		user.CustomerID,
+		user.ID,
 	];
 
 	try {
-		await Query(query, values);
+		const res = await Query(query, values);
 		const expires = new Date(Date.now() + 3600 * 1000);
 		const session = await encrypt({ user, expires });
+
+		console.log(res);
 
 		cookies().set("session", session, { expires, httpOnly: true });
 		return { success: "User updated successfully!" };
 	} catch (error) {
+		console.log(error);
 		return { error: "Something went wrong!" };
 	}
 }
@@ -190,7 +196,7 @@ export async function makeBooking(
 		new Date(),
 		dates.startDate,
 		dates.endDate,
-		user.CustomerID,
+		user.ID,
 	];
 	try {
 		const results: any = await Query(query, values);
@@ -210,7 +216,37 @@ export async function getBookings() {
 
 	const user = session.user;
 
-	const query = `SELECT 
+	const query = user?.HiringDate
+		? `SELECT b.BookingID, 
+					b.RoomID, 
+					b.HotelID, 
+					b.ChainID, 
+					b.CustomerID, 
+					b.EndDate, 
+					b.BookingDate, 
+					b.StartDate, 
+					h.HotelName, 
+					h.Street,
+					h.City,
+					h.PostalCode,
+					h.Country,
+					h.Category,
+					r.Capacity,
+					r.View,
+					r.Extendable,
+					r.Amenities,
+					r.Price,
+					r.image_href,
+					i.IssueDescription
+					FROM 
+						Booking b
+					JOIN 
+						Hotel h ON b.HotelID = h.HotelID
+					JOIN 
+						Room r ON b.RoomID = r.RoomID
+					LEFT JOIN 
+						Issue i ON b.RoomID = i.RoomID;`
+		: `SELECT 
 					b.BookingID, 
 					b.RoomID, 
 					b.HotelID, 
@@ -244,8 +280,112 @@ export async function getBookings() {
 						b.CustomerID = ?;
 					`;
 
-	const results = await Query(query, [user.CustomerID]);
+	const results = await Query(query, [user.ID]);
 	return results;
+}
+
+export async function getRentings() {
+	const session = await getSession();
+
+	if (!session) {
+		redirect("/login");
+	}
+
+	const user = session.user;
+
+	const query = user?.HiringDate
+		? `SELECT 
+			r.RentingID, 
+			r.RoomID, 
+			r.HotelID, 
+			r.ChainID, 
+			r.CustomerID, 
+			r.EndDate, 
+			r.StartDate AS BookingDate, 
+			r.StartDate, 
+			h.HotelName, 
+			h.Street,
+			h.City,
+			h.PostalCode,
+			h.Country,
+			h.Category,
+			rm.Capacity,
+			rm.View,
+			rm.Extendable,
+			rm.Amenities,
+			rm.Price,
+			rm.image_href,
+			i.IssueDescription
+		FROM 
+			Renting r
+		JOIN 
+			Hotel h ON r.HotelID = h.HotelID
+		JOIN 
+			Room rm ON r.RoomID = rm.RoomID
+		LEFT JOIN 
+			Issue i ON r.RoomID = i.RoomID;`
+		: `SELECT 
+					r.RentingID, 
+					r.RoomID, 
+					r.HotelID, 
+					r.ChainID, 
+					r.CustomerID, 
+					r.EndDate, 
+					r.StartDate AS BookingDate, 
+					r.StartDate, 
+					h.HotelName, 
+					h.Street,
+					h.City,
+					h.PostalCode,
+					h.Country,
+					h.Category,
+					rm.Capacity,
+					rm.View,
+					rm.Extendable,
+					rm.Amenities,
+					rm.Price,
+					rm.image_href,
+					i.IssueDescription
+				FROM 
+					Renting r
+				JOIN 
+					Hotel h ON r.HotelID = h.HotelID
+				JOIN 
+					Room rm ON r.RoomID = rm.RoomID
+				LEFT JOIN 
+					Issue i ON r.RoomID = i.RoomID
+				WHERE
+					r.CustomerID = ?;`;
+
+	const values = user?.HiringDate ? [] : [user.ID];
+	const results = await Query(query, values);
+	return results;
+}
+
+export async function createRenting(BookingID: number) {
+	const query = `INSERT INTO Renting (CustomerID, RoomID, HotelID, ChainID, StartDate, EndDate)
+					SELECT 
+						b.CustomerID,
+						b.RoomID,
+						b.HotelID,
+						b.ChainID,
+						b.StartDate,
+						b.EndDate
+					FROM 
+						Booking b
+					WHERE 
+						b.BookingID = ?;`;
+
+	const values = [BookingID];
+
+	try {
+		const res = await Query(query, values);
+		await Query("DELETE FROM Booking WHERE BookingID = ?;", [BookingID]);
+		revalidatePath("/Bookings");
+		return;
+	} catch (error) {
+		return { error: "Something went wrong!" };
+	}
 }
 
 export async function updateSession() {

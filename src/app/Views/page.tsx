@@ -21,7 +21,6 @@ async function getViews() {
 
 export default async function Views() {
 	const { availableRooms, hotelCapacities }: any = await getViews();
-	console.log(hotelCapacities);
 	return (
 		<div className="bg-gray-100">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

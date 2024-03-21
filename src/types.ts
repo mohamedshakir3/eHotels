@@ -22,14 +22,25 @@ export type SearchQuery = {
 	country: string;
 };
 
+export interface Employee extends User {
+	HotelID: number;
+	ChainID: number;
+	Role: string;
+	Salary: number;
+	HiringDate: Date;
+}
+
+export interface Customer extends User {
+	RegistrationDate: Date;
+}
+
 export type User = {
-	CustomerID: number;
+	ID: number;
 	Email: string;
-	CustomerName: string;
+	Password: string;
+	Name: string;
 	Address: string;
 	SSN: string;
-	RegistrationDate: Date;
-	Password: string;
 };
 
 export type Booking = {
@@ -54,4 +65,28 @@ export type Booking = {
 	image_href: string;
 	Category: number;
 	Extendable: boolean;
+};
+
+export type Renting = {
+	RentingID: number;
+	RoomID: number;
+	HotelID: number;
+	ChainID: number;
+	CustomerID: number;
+	EndDate: Date;
+	BookingDate: Date;
+	StartDate: Date;
+	HotelName: string;
+	Street: string;
+	City: string;
+	PostalCode: string;
+	Country: string;
+	Category: number; // Assuming Category is numeric
+	Capacity: number;
+	View: string;
+	Extendable: boolean;
+	Amenities: string[];
+	Price: number;
+	image_href: string;
+	IssueDescription?: string; // IssueDescription is optional
 };
