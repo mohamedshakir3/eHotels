@@ -29,7 +29,7 @@ function formatDate(date: Date) {
 	return `${months[date.getMonth()]}, ${date.getDate()}, ${date.getFullYear()}`;
 }
 
-export default function Profile({ User }: { User: Customer }) {
+export default function Profile({ User }: { User: any }) {
 	const [user, setUser] = useState(User);
 
 	async function submitChange(e) {
