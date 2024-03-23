@@ -1,7 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-	const session = request.cookies.get("session")?.value;
+import { getSession } from "@/lib";
+
+export async function middleware(request: NextRequest) {
+	const session = await getSession();
+	const user = session?.user;
+
+	if (request.nextUrl.pathname.includes("/Chains/Edit")) {
+		if (!user || user?.HiringDate === undefined) {
+			return NextResponse.redirect(new URL("/", request.url));
+		}
+	}
 
 	if (request.nextUrl.pathname === "/Bookings" && !session) {
 		return NextResponse.redirect(new URL("/Login", request.url));

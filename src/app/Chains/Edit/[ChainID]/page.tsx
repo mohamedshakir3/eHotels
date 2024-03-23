@@ -6,6 +6,7 @@ async function getRoomsbyChainID(ChainID: string) {
 		const query = `SELECT 
 		h.HotelID,
 		h.HotelName,
+		h.ChainID,
 		h.Street,
 		r.RoomID,
 		r.Price,
@@ -24,7 +25,7 @@ async function getRoomsbyChainID(ChainID: string) {
 		JOIN 
 		Employee e ON h.ManagerID = e.ID
 		WHERE 
-		h.ChainID = ?
+		h.ChainID = 3
 		GROUP BY 
 		h.HotelID, r.RoomID;`;
 
@@ -38,6 +39,7 @@ async function getRoomsbyChainID(ChainID: string) {
 			const hotelName = row.HotelName;
 			if (!roomsByHotels.hasOwnProperty(hotelName)) {
 				roomsByHotels[hotelName] = {
+					ChainID: row.ChainID,
 					HotelID: row.HotelID,
 					Manager: row.ManagerName,
 					Street: row.Street,

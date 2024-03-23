@@ -47,14 +47,12 @@ async function getRoomsbyChainID(ChainID: string) {
 		JOIN 
 		Employee e ON h.ManagerID = e.ID
 		WHERE 
-		h.ChainID = ?
-		GROUP BY 
-		h.HotelID, r.RoomID;`;
+		h.ChainID = ?`;
 
 		const values = [ChainID];
 
 		const res: any = await Query(query, values);
-
+		console.log(res);
 		const roomsByHotels = {};
 
 		res.forEach((row) => {
@@ -98,6 +96,8 @@ export default async function RoomDetails({
 	if (session) {
 		user = session.user;
 	}
+
+	console.log(rooms);
 	return (
 		<div className="bg-gray-100">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -110,8 +110,8 @@ export default async function RoomDetails({
 							<Link href={`Edit/${params.ChainID}`}>Edit</Link>
 						) : null}
 					</div>
-					{Object.entries(rooms).map(([hotelName, rooms]: any) => (
-						<>
+					{Object.entries(rooms).map(([hotelName, rooms]: any, index) => (
+						<div key={index}>
 							<div className="min-w-0 flex-1">
 								<h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
 									{hotelName}
@@ -181,7 +181,7 @@ export default async function RoomDetails({
 									</Tbody>
 								</Table>
 							</TableContainer>
-						</>
+						</div>
 					))}
 				</div>
 			</div>

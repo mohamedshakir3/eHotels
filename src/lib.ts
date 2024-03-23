@@ -436,3 +436,53 @@ export async function updateHotels(hotelInfoObj, updates) {
 		return { error: "Something went wrong!" };
 	}
 }
+
+export async function addRoom({
+	amenities,
+	view,
+	extendable,
+	price,
+	capacity,
+	imagehref,
+	hotelID,
+	chainID,
+}: {
+	amenities: string;
+	view: string;
+	extendable: string;
+	price: number;
+	capacity: number;
+	imagehref: string;
+	hotelID: string;
+	chainID: number;
+}) {
+	const query = `INSERT INTO Room (HotelID, ChainID, Price, Capacity, View, Amenities, Extendable, image_href)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
+	const values = [
+		hotelID,
+		chainID,
+		price,
+		capacity,
+		view,
+		amenities,
+		extendable === "Yes" ? 1 : 0,
+		imagehref,
+	];
+
+	try {
+		const res: any = await Query(query, values);
+	} catch (error) {
+		return { error: "Something went wrong!" };
+	}
+}
+
+export async function deleteRoom(RoomID: number, ChainID: number) {
+	const query = `DELETE FROM Room WHERE RoomID = ?;`;
+	const values = [RoomID];
+	try {
+		const res: any = await Query(query, values);
+		revalidatePath(`/Chains/Edit/${ChainID}`);
+	} catch (error) {
+		return { error: "Something went wrong!" };
+	}
+}
