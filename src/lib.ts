@@ -403,3 +403,36 @@ export async function updateSession() {
 		expires: parsed.expires,
 	});
 }
+
+export async function updateHotels(hotelInfoObj, updates) {
+	const queries: any[][] = [];
+	Object.entries(hotelInfoObj).forEach(([hotelName, hotelInfo]: [any, any]) => {
+		if (updates.hasOwnProperty(hotelInfo.HotelID)) {
+			updates[hotelInfo.HotelID].forEach((roomID: number) => {
+				const room = hotelInfo.Rooms.find(
+					(room: any) => room.RoomID === roomID
+				);
+				queries.push([
+					"UPDATE Room SET Capacity = ?, View = ?, Amenities = ?, Price = ? WHERE RoomID = ?;",
+					[room.Capacity, room.View, room.Amenities, room.Price, roomID],
+				]);
+			});
+			queries.push([
+				"UPDATE Hotel SET Street = ?, Category = ?, PhoneNumber = ? WHERE HotelID = ?;",
+				[
+					hotelInfo.Street,
+					hotelInfo.Stars,
+					hotelInfo.PhoneNumber,
+					hotelInfo.HotelID,
+				],
+			]);
+		}
+	});
+	try {
+		queries.forEach(async (query) => {
+			await Query(query[0], query[1]);
+		});
+	} catch (error) {
+		return { error: "Something went wrong!" };
+	}
+}

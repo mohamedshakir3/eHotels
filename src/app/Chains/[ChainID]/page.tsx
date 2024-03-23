@@ -106,7 +106,9 @@ export default async function RoomDetails({
 						<h1 className="text-2xl font-semibold leading-tight text-gray-900">
 							Hotel Chains Information
 						</h1>
-						{user?.HiringDate ? <Link href="#">Edit</Link> : null}
+						{user?.HiringDate ? (
+							<Link href={`Edit/${params.ChainID}`}>Edit</Link>
+						) : null}
 					</div>
 					{Object.entries(rooms).map(([hotelName, rooms]: any) => (
 						<>

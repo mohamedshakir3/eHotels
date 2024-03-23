@@ -23,13 +23,6 @@ export default async function SearchResults({
 	return (
 		<>
 			<CategoryFilters rooms={rooms} searchParams={searchParams} />
-
-			{/* <h1>Search Results</h1>
-			<ul>
-				{hotels.map((hotel: any) => (
-					<li key={hotel.HotelID}>{hotel.HotelName}</li>
-				))}
-			</ul> */}
 		</>
 	);
 }
