@@ -1,10 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { decrypt, getSession } from "@/lib";
+import { SignJWT, jwtVerify } from "jose";
+// import { decrypt, getSession } from "@/lib";
+const secretKey = "secret";
+const key = new TextEncoder().encode(secretKey);
 
 export async function middleware(request: NextRequest) {
 	const session = request.cookies.get("session")?.value;
-	// const user = session && (await decrypt(session));
+
+	if (session) {
+		const { payload } = await jwtVerify(session, key, {
+			algorithms: ["HS256"],
+		});
+	}
 
 	// if (request.nextUrl.pathname.includes("/Chains/Edit")) {
 	// 	if (!user || user?.Role !== "Manager") {
