@@ -63,7 +63,6 @@ export default function Bookings({
 		} else {
 			setOpen(true);
 		}
-		console.log("Renting Booking with ID:" + selected);
 	};
 
 	const makeRenting = async () => {

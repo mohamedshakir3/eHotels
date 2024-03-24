@@ -52,7 +52,6 @@ async function getRoomsbyChainID(ChainID: string) {
 		const values = [ChainID];
 
 		const res: any = await Query(query, values);
-		console.log(res);
 		const roomsByHotels = {};
 
 		res.forEach((row) => {
@@ -77,7 +76,6 @@ async function getRoomsbyChainID(ChainID: string) {
 
 		return roomsByHotels;
 	} catch (error) {
-		console.log(error);
 		return [];
 	}
 }
@@ -97,7 +95,6 @@ export default async function RoomDetails({
 		user = session.user;
 	}
 
-	console.log(rooms);
 	return (
 		<div className="bg-gray-100">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

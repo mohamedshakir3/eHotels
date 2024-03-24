@@ -53,7 +53,6 @@ export async function login(formData: FormData) {
 	]);
 
 	const user = results[0];
-	console.log(user);
 
 	if (!user) {
 		return { error: "User not found" };
@@ -137,7 +136,6 @@ export async function addUser(formData: FormData) {
 }
 
 export async function updateUser(user: Customer) {
-	console.log(user);
 	const query =
 		"UPDATE Customer SET CustomerName = ?, Address = ?, RegistrationDate = ?, SSN = ?, Email = ?, Password = ? WHERE CustomerID = ?";
 	const values = [
@@ -155,12 +153,9 @@ export async function updateUser(user: Customer) {
 		const expires = new Date(Date.now() + 3600 * 1000);
 		const session = await encrypt({ user, expires });
 
-		console.log(res);
-
 		cookies().set("session", session, { expires, httpOnly: true });
 		return { success: "User updated successfully!" };
 	} catch (error) {
-		console.log(error);
 		return { error: "Something went wrong!" };
 	}
 }

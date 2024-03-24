@@ -23,7 +23,6 @@ export default function EmployeeDialog({
 	};
 
 	const removeRoom = async () => {
-		console.log("Deleting room with ID: ", roomID);
 		const res: any = await deleteRoom(roomID, chainID);
 
 		if (res?.error) {

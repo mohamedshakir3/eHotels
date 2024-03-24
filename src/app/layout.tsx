@@ -19,7 +19,6 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const auth = await getSession();
-	await updateSession();
 	return (
 		<html className="h-full bg-white" lang="en">
 			<body>

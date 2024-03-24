@@ -8,7 +8,6 @@ import { redirect } from "next/navigation";
 export default function SignupForm({ HotelID }) {
 	const [hotelID, chainID] = HotelID;
 	async function clientAction(formData: FormData) {
-		console.log(`/Chains/${chainID}`);
 		const { amenities, view, extendable, price, capacity, imagehref }: any =
 			Object.fromEntries(formData);
 
@@ -48,8 +47,6 @@ export default function SignupForm({ HotelID }) {
 			hotelID,
 			chainID,
 		});
-
-		console.log(res);
 
 		if (res?.error) {
 			toast.error(res.error);

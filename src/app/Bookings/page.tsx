@@ -28,8 +28,6 @@ export default async function page() {
 	const session = await getSession();
 	const user = session.user;
 
-	console.log(rentings);
-
 	if (user?.HiringDate) {
 		const employee: Employee = user;
 	}

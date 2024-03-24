@@ -62,7 +62,6 @@ async function getRoomsbyChainID(ChainID: string) {
 
 		return roomsByHotels;
 	} catch (error) {
-		console.log(error);
 		return [];
 	}
 }

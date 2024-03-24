@@ -7,7 +7,6 @@ import { getSession } from "@/lib";
 export default async function page() {
 	const session = await getSession();
 	const user: User = session?.user;
-	console.log(user);
 	return (
 		<div className="md:container min-w-80 md:mx-auto">
 			<Profile User={user} />
