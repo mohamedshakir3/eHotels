@@ -104,7 +104,7 @@ export async function addUser(formData: FormData) {
 	} = Object.fromEntries(formData);
 
 	const query =
-		"INSERT INTO Customer (CustomerName, Email, Password, RegistrationDate, SSN, Address) VALUES (?, ?, ?,?, ?, ?)";
+		"INSERT INTO Customer (Name, Email, Password, RegistrationDate, SSN, Address, Role) VALUES (?, ?, ?,?, ?, ?, ?)";
 
 	try {
 		const results: any = await Query(query, [
@@ -114,16 +114,18 @@ export async function addUser(formData: FormData) {
 			new Date(),
 			ssn,
 			`${streetaddress}, ${city}, ${region}, ${postalcode}`,
+			"Customer",
 		]);
 
 		const user = {
-			CustomerID: results.insertId,
-			CustomerName: `${firstname} ${lastname}`,
+			ID: results.insertId,
+			Name: `${firstname} ${lastname}`,
 			Email: email,
 			Password: password,
 			RegistrationDate: new Date(),
 			SSN: ssn,
 			Address: `${streetaddress}, ${city}, ${region}, ${postalcode}`,
+			Role: "Customer",
 		};
 
 		const expires = new Date(Date.now() + 3600 * 1000);
