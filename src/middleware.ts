@@ -4,8 +4,7 @@ import { decrypt, getSession } from "@/lib";
 
 export async function middleware(request: NextRequest) {
 	const session = request.cookies.get("session")?.value;
-	const user =
-		session && (await decrypt(session).catch((error) => console.error(error)));
+	const user = session && (await decrypt(session));
 
 	if (request.nextUrl.pathname.includes("/Chains/Edit")) {
 		if (!user || user?.Role !== "Manager") {
