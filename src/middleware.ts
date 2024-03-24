@@ -1,13 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { getSession } from "@/lib";
+import { decrypt, getSession } from "@/lib";
 
 export async function middleware(request: NextRequest) {
-	const session = await getSession();
-	const user = session?.user;
+	const session = request.cookies.get("session")?.value;
+	const user =
+		session && (await decrypt(session).catch((error) => console.log(error)));
+
+	console.log(user);
 
 	if (request.nextUrl.pathname.includes("/Chains/Edit")) {
-		if (!user || user?.HiringDate === undefined) {
+		if (!user || user?.Role !== "Manager") {
 			return NextResponse.redirect(new URL("/", request.url));
 		}
 	}

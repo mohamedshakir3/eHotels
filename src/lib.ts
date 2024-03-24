@@ -48,10 +48,9 @@ export async function decrypt(input: string): Promise<any> {
 export async function login(formData: FormData) {
 	const { email, password } = Object.fromEntries(formData);
 
-	const results: any = await Query(
-		"SELECT * FROM CustomerEmployeeView WHERE email = ?",
-		[email]
-	);
+	const results: any = await Query("SELECT * FROM UserView WHERE email = ?", [
+		email,
+	]);
 
 	const user = results[0];
 	console.log(user);
