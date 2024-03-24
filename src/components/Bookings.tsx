@@ -78,7 +78,7 @@ export default function Bookings({
 
 	return (
 		<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			{user?.HiringDate ? (
+			{user?.Role !== "Customer" ? (
 				<EmployeeDialog open={open} setOpen={setOpen} onClick={makeRenting} />
 			) : (
 				<CustomerDialog open={open} setOpen={setOpen} />
@@ -110,7 +110,7 @@ export default function Bookings({
 									className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
 									aria-hidden="true"
 								/>
-								{user?.HiringDate
+								{user?.Role !== "Customer"
 									? "Hired on " + formatDate(new Date(user.HiringDate))
 									: "Registered on " +
 									  formatDate(new Date(user.RegistrationDate))}
@@ -221,13 +221,15 @@ export default function Bookings({
 								id={`${booking.BookingID}`}
 							>
 								<div className="flex min-w-0 gap-x-4">
-									<input
-										className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-										type="radio"
-										id={`${booking.BookingID}`}
-										name="Booking"
-										onChange={() => setSelected(booking.BookingID)}
-									/>
+									{user?.Role === "Customer" ? null : (
+										<input
+											className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+											type="radio"
+											id={`${booking.BookingID}`}
+											name="Booking"
+											onChange={() => setSelected(booking.BookingID)}
+										/>
+									)}
 									<Link href={`Rooms/${booking.RoomID}`}>
 										<img
 											className="h-36 w-48 flex-none rounded-md bg-gray-50"

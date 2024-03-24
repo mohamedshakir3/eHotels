@@ -55,11 +55,11 @@ export async function login(formData: FormData) {
 	const user = results[0];
 
 	if (!user) {
-		return { error: "User not found" };
+		return { error: "User" };
 	}
 
 	if (user.Password !== password) {
-		return { error: "Password is incorrect" };
+		return { error: "Password" };
 	}
 
 	const expires = new Date(Date.now() + 3600 * 1000);
@@ -67,11 +67,7 @@ export async function login(formData: FormData) {
 
 	cookies().set("session", session, { expires, httpOnly: true });
 
-	if (cookies().get("booking")) {
-		return "/Bookings";
-	} else {
-		return "/";
-	}
+	return;
 }
 
 export async function logout() {
@@ -139,7 +135,7 @@ export async function addUser(formData: FormData) {
 
 export async function updateUser(user: Customer) {
 	const query =
-		"UPDATE Customer SET CustomerName = ?, Address = ?, RegistrationDate = ?, SSN = ?, Email = ?, Password = ? WHERE CustomerID = ?";
+		"UPDATE Customer SET Name = ?, Address = ?, RegistrationDate = ?, SSN = ?, Email = ?, Password = ? WHERE ID = ?";
 	const values = [
 		user.Name,
 		user.Address,
