@@ -17,7 +17,10 @@ export async function middleware(request: NextRequest) {
 		user = payload;
 	}
 
-	if (request.nextUrl.pathname.includes("/Chains/Edit")) {
+	if (
+		request.nextUrl.pathname.includes("/Chains/Edit") ||
+		request.nextUrl.pathname.includes("/AddRoom")
+	) {
 		if (!user || user?.Role !== "Manager") {
 			return NextResponse.redirect(new URL("/", request.url));
 		}
