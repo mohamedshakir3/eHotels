@@ -4,13 +4,13 @@ import { decrypt, getSession } from "@/lib";
 
 export async function middleware(request: NextRequest) {
 	const session = request.cookies.get("session")?.value;
-	const user = session && (await decrypt(session));
+	// const user = session && (await decrypt(session));
 
-	if (request.nextUrl.pathname.includes("/Chains/Edit")) {
-		if (!user || user?.Role !== "Manager") {
-			return NextResponse.redirect(new URL("/", request.url));
-		}
-	}
+	// if (request.nextUrl.pathname.includes("/Chains/Edit")) {
+	// 	if (!user || user?.Role !== "Manager") {
+	// 		return NextResponse.redirect(new URL("/", request.url));
+	// 	}
+	// }
 
 	if (request.nextUrl.pathname === "/Bookings" && !session) {
 		return NextResponse.redirect(new URL("/Login", request.url));
