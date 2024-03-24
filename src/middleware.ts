@@ -8,17 +8,20 @@ const key = new TextEncoder().encode(secretKey);
 export async function middleware(request: NextRequest) {
 	const session = request.cookies.get("session")?.value;
 
+	let user;
+
 	if (session) {
 		const { payload } = await jwtVerify(session, key, {
 			algorithms: ["HS256"],
 		});
+		user = payload;
 	}
 
-	// if (request.nextUrl.pathname.includes("/Chains/Edit")) {
-	// 	if (!user || user?.Role !== "Manager") {
-	// 		return NextResponse.redirect(new URL("/", request.url));
-	// 	}
-	// }
+	if (request.nextUrl.pathname.includes("/Chains/Edit")) {
+		if (!user || user?.Role !== "Manager") {
+			return NextResponse.redirect(new URL("/", request.url));
+		}
+	}
 
 	if (request.nextUrl.pathname === "/Bookings" && !session) {
 		return NextResponse.redirect(new URL("/Login", request.url));
