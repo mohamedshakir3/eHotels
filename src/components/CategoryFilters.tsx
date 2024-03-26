@@ -121,21 +121,27 @@ export default function CategoryFilter({
 		} else {
 			setFilter({ ...filter, [e.target.name]: parseInt(e.target.value) });
 		}
+		console.log(filter);
 	};
 
 	useEffect(() => {
-		setFilteredRooms(
-			rooms.filter((room) => {
-				return (
-					room.Country === filter.country &&
-					filter.Amenities.some((amenity) =>
-						room.Amenities.includes(amenity)
-					) &&
-					room.Capacity >= filter.People &&
-					room.Category >= filter.Stars
-				);
-			})
-		);
+		if (filter.Amenities.length === 0) {
+			setFilter({ ...filter, Amenities: ["Wi-Fi"] });
+		} else {
+			setFilteredRooms(
+				rooms.filter((room) => {
+					return (
+						room.Country === filter.country &&
+						filter.Amenities.some((amenity) =>
+							room.Amenities.includes(amenity)
+						) &&
+						room.Capacity >= filter.People &&
+						room.Category >= filter.Stars
+					);
+				})
+			);
+		}
+		console.log(filteredRooms);
 	}, [filter]);
 	const roomElems = filteredRooms.map((room) => (
 		<div key={room.RoomID} className="group relative">

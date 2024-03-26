@@ -11,9 +11,9 @@ export default function SearchBar() {
 	});
 
 	const [selected, setSelected] = useState({
-		name: "Canada",
-		flag: "https://flagcdn.com/ca.svg",
-		emoji: "🇨🇦",
+		name: "United States",
+		flag: "https://flagcdn.com/us.svg",
+		emoji: "🇺🇸",
 	});
 
 	return (

@@ -40,17 +40,6 @@ export default async function RoomDetails({
 
 	return (
 		<>
-			{/* <h1>Room Details</h1>
-			<p>{room[0].HotelName}</p>
-			<p>{room[0].Street}</p>
-			<p>{room[0].City}</p>
-			<p>{room[0].PostalCode}</p>
-			<p>{room[0].Country}</p>
-			<p>{room[0].Price}</p>
-			<p>{room[0].Capacity}</p>
-			<p>{room[0].View}</p>
-			<p>{room[0].Amenities}</p>
-			<p>{room[0].image_href}</p> */}
 			<RoomOverview room={room[0]} hrefs={hrefs ? hrefs : []} issues={issues} />
 		</>
 	);
