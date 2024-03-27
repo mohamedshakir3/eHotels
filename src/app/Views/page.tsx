@@ -40,7 +40,7 @@ export default async function Views() {
 							<Tbody>
 								{availableRooms.map((entry, i) => (
 									<Tr key={i}>
-										<Td>{entry.City}</Td>
+										<Td>{entry.City}</Td>{" "}
 										<Td isNumeric>{entry.AvailableRooms}</Td>
 									</Tr>
 								))}

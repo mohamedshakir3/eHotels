@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
 		const { payload } = await jwtVerify(session, key, {
 			algorithms: ["HS256"],
 		});
-		user = payload;
+		user = payload?.user;
 	}
 
 	if (

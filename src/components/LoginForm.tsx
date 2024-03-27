@@ -1,5 +1,6 @@
 "use client";
 import { login } from "@/lib";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -22,6 +23,8 @@ export default function LoginForm() {
 						toast.error("Invalid password");
 					}
 				} else {
+					toast.success("Logged in!");
+					redirect("/");
 				}
 			}}
 		>

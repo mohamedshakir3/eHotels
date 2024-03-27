@@ -208,8 +208,9 @@ export async function getBookings() {
 
 	const user = session.user;
 
-	const query = user?.HiringDate
-		? `SELECT b.BookingID, 
+	const query =
+		user?.Role === "Manager"
+			? `SELECT b.BookingID, 
 					b.RoomID, 
 					b.HotelID, 
 					b.ChainID, 
@@ -238,7 +239,7 @@ export async function getBookings() {
 						Room r ON b.RoomID = r.RoomID
 					LEFT JOIN 
 						Issue i ON b.RoomID = i.RoomID;`
-		: `SELECT 
+			: `SELECT 
 					b.BookingID, 
 					b.RoomID, 
 					b.HotelID, 
@@ -273,6 +274,7 @@ export async function getBookings() {
 					`;
 
 	const results = await Query(query, [user.ID]);
+	console.log(results);
 	return results;
 }
 
@@ -285,8 +287,9 @@ export async function getRentings() {
 
 	const user = session.user;
 
-	const query = user?.HiringDate
-		? `SELECT 
+	const query =
+		user?.Role === "Manager"
+			? `SELECT 
 			r.RentingID, 
 			r.RoomID, 
 			r.HotelID, 
@@ -316,7 +319,7 @@ export async function getRentings() {
 			Room rm ON r.RoomID = rm.RoomID
 		LEFT JOIN 
 			Issue i ON r.RoomID = i.RoomID;`
-		: `SELECT 
+			: `SELECT 
 					r.RentingID, 
 					r.RoomID, 
 					r.HotelID, 
@@ -349,8 +352,10 @@ export async function getRentings() {
 				WHERE
 					r.CustomerID = ?;`;
 
-	const values = user?.HiringDate ? [] : [user.ID];
+	const values = user?.Role === "Manager" ? [] : [user.ID];
 	const results = await Query(query, values);
+	console.log(results);
+
 	return results;
 }
 
@@ -397,7 +402,7 @@ export async function updateSession() {
 }
 
 export async function updateHotels(hotelInfoObj, updates) {
-	const queries: any[][] = [];
+	const queries: any[] = [];
 	Object.entries(hotelInfoObj).forEach(([hotelName, hotelInfo]: [any, any]) => {
 		if (updates.hasOwnProperty(hotelInfo.HotelID)) {
 			updates[hotelInfo.HotelID].forEach((roomID: number) => {

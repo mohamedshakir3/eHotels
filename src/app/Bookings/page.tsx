@@ -28,9 +28,5 @@ export default async function page() {
 	const session = await getSession();
 	const user = session.user;
 
-	if (user?.HiringDate) {
-		const employee: Employee = user;
-	}
-
 	return <Bookings bookings={bookings} rentings={rentings} user={user} />;
 }

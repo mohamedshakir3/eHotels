@@ -42,12 +42,12 @@ async function getRoomsbyChainID(ChainID: string) {
 		r.Amenities
 		FROM 
 		Hotel h
-		JOIN 
+		LEFT JOIN 
 		Room r ON h.HotelID = r.HotelID
 		JOIN 
 		Employee e ON h.ManagerID = e.ID
 		WHERE 
-		h.ChainID = ?`;
+		h.ChainID = 1`;
 
 		const values = [ChainID];
 
@@ -87,6 +87,7 @@ export default async function RoomDetails({
 }) {
 	const rooms: any = await getRoomsbyChainID(params.ChainID);
 
+	console.log(rooms);
 	const session = await getSession();
 
 	let user: any = null;
@@ -103,7 +104,7 @@ export default async function RoomDetails({
 						<h1 className="text-2xl font-semibold leading-tight text-gray-900">
 							Hotel Chains Information
 						</h1>
-						{user?.HiringDate ? (
+						{user?.Role === "Manager" ? (
 							<Link href={`Edit/${params.ChainID}`}>Edit</Link>
 						) : null}
 					</div>
