@@ -47,7 +47,7 @@ async function getRoomsbyChainID(ChainID: string) {
 		JOIN 
 		Employee e ON h.ManagerID = e.ID
 		WHERE 
-		h.ChainID = 1`;
+		h.ChainID = ?`;
 
 		const values = [ChainID];
 

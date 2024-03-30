@@ -171,7 +171,7 @@ export async function makeBooking(
 			expires,
 			httpOnly: true,
 		});
-		return redirect("/Login");
+		return { error: "Not Logged In!" };
 	}
 
 	const parsedSession = await decrypt(session);

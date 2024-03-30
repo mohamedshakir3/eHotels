@@ -111,7 +111,7 @@ export default function Bookings({
 									aria-hidden="true"
 								/>
 								{user?.Role !== "Customer"
-									? "Hired on " + formatDate(new Date(user.HiringDate))
+									? "Hired on " + formatDate(new Date(user.RegistrationDate))
 									: "Registered on " +
 									  formatDate(new Date(user.RegistrationDate))}
 							</div>
