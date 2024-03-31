@@ -165,12 +165,6 @@ export async function makeBooking(
 	const session = cookies().get("session")?.value;
 
 	if (!session) {
-		const booking = { room, dates };
-		const expires = new Date(Date.now() + 3600 * 1000);
-		cookies().set("booking", await encrypt({ booking, expires }), {
-			expires,
-			httpOnly: true,
-		});
 		return { error: "Not Logged In!" };
 	}
 
@@ -179,7 +173,7 @@ export async function makeBooking(
 	const user = parsedSession.user;
 
 	const query =
-		"INSERT INTO Booking (RoomID, HotelID, ChainID, BookingDate, StartDate, EndDate, CustomerID) VALUES (?, ?, ?, ?,?, ?, ?)";
+		"INSERT INTO Booking (RoomID, HotelID, ChainID, BookingDate, StartDate, EndDate, CustomerID) VALUES (?,?,?,?,?,?,?)";
 
 	const values = [
 		room.RoomID,
@@ -191,8 +185,9 @@ export async function makeBooking(
 		user.ID,
 	];
 	try {
+		console.log(query, values);
 		const results: any = await Query(query, values);
-		return;
+		console.log(results);
 	} catch (error) {
 		return { error: "Something went wrong!" };
 	}
