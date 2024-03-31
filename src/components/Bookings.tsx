@@ -78,7 +78,7 @@ export default function Bookings({
 
 	return (
 		<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			{user?.Role !== "Customer" ? (
+			{user?.Role === "Manager" ? (
 				<EmployeeDialog open={open} setOpen={setOpen} onClick={makeRenting} />
 			) : (
 				<CustomerDialog open={open} setOpen={setOpen} />
@@ -146,7 +146,7 @@ export default function Bookings({
 
 						<span className="sm:ml-3">
 							<button
-								type={user?.Role === "Employee" ? "submit" : "button"}
+								type={user?.Role === "Manager" ? "submit" : "button"}
 								onClick={
 									user?.Role === "Customer" ? () => setOpen(true) : () => {}
 								}

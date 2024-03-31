@@ -121,7 +121,6 @@ export default function CategoryFilter({
 		} else {
 			setFilter({ ...filter, [e.target.name]: parseInt(e.target.value) });
 		}
-		console.log(filter);
 	};
 
 	useEffect(() => {
@@ -141,7 +140,6 @@ export default function CategoryFilter({
 				})
 			);
 		}
-		console.log(filteredRooms);
 	}, [filter]);
 	const roomElems = filteredRooms.map((room) => (
 		<div key={room.RoomID} className="group relative">

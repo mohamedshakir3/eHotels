@@ -12,7 +12,6 @@ export default function LoginForm() {
 			className="space-y-6"
 			action={async (formData) => {
 				const res: any = await login(formData);
-				console.log(res);
 				if (res?.error) {
 					if (res.error === "User") {
 						setUserError(true);

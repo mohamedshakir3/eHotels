@@ -185,9 +185,7 @@ export async function makeBooking(
 		user.ID,
 	];
 	try {
-		console.log(query, values);
 		const results: any = await Query(query, values);
-		console.log(results);
 	} catch (error) {
 		return { error: "Something went wrong!" };
 	}
@@ -196,9 +194,7 @@ export async function makeBooking(
 export async function getBookings() {
 	const session = await getSession();
 
-	const user = session.user;
-
-	console.log(user);
+	const user = session?.user;
 
 	const query =
 		user?.Role === "Manager"
@@ -266,7 +262,6 @@ export async function getBookings() {
 					`;
 
 	const results = await Query(query, [user.ID]);
-	console.log(results);
 	return results;
 }
 
@@ -346,7 +341,6 @@ export async function getRentings() {
 
 	const values = user?.Role === "Manager" ? [] : [user.ID];
 	const results = await Query(query, values);
-	console.log(results);
 
 	return results;
 }

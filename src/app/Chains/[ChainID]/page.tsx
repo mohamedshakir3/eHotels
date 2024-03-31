@@ -87,7 +87,6 @@ export default async function RoomDetails({
 }) {
 	const rooms: any = await getRoomsbyChainID(params.ChainID);
 
-	console.log(rooms);
 	const session = await getSession();
 
 	let user: any = null;
