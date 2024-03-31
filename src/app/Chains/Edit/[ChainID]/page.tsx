@@ -25,7 +25,7 @@ async function getRoomsbyChainID(ChainID: string) {
 		JOIN 
 		Employee e ON h.ManagerID = e.ID
 		WHERE 
-		h.ChainID = 3
+		h.ChainID = ?
 		GROUP BY 
 		h.HotelID, r.RoomID;`;
 

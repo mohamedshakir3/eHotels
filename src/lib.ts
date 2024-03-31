@@ -201,12 +201,9 @@ export async function makeBooking(
 export async function getBookings() {
 	const session = await getSession();
 
-	if (!session) {
-		redirect("/login");
-		return { error: "Not Logged In!" };
-	}
-
 	const user = session.user;
+
+	console.log(user);
 
 	const query =
 		user?.Role === "Manager"
